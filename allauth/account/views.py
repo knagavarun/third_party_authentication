@@ -30,7 +30,9 @@ from . import signals
 from . import app_settings
 
 from .adapter import get_adapter
-
+from allauth.socialaccount.models import SocialAccount
+from allauth.account.models import EmailAddress
+from allauth.account.utils import user_email
 User = get_user_model()
 
 class RedirectAuthenticatedUserMixin(object):
@@ -79,7 +81,50 @@ class LoginView(RedirectAuthenticatedUserMixin, FormView):
         return ret
 
 login = LoginView.as_view()
-
+@login_required
+def profileview(request):
+	user=request.user	
+	if user.is_authenticated:
+		a=SocialAccount.objects.filter(user=user)	
+		try:	
+			f=a.get(provider='facebook')
+			fusername=f.get_provider_account	
+			fdata=f.extra_data 
+			ffirst_name=fdata['first_name']		
+			flast_name=fdata['last_name']
+			femail=fdata.get('email')
+		except:		
+			fusername=None
+			ffirst_name=None
+			flast_name=None
+			femail=None
+		try:
+			g=a.get(provider='google')
+			gusername=g.get_provider_account			
+			gdata=g.extra_data
+			gfirst_name=gdata['given_name']
+			glast_name=gdata['family_name']			
+			gemail=gdata['email']
+		except:
+			gusername=None
+			gemail=None
+			gfirst_name=None
+			glast_name=None
+		try:	
+			t=a.get(provider='twitter')	
+			tusername=t.get_provider_account
+			tdata=t.extra_data
+			#temail=tdata['email']
+			tname=tdata['name']
+		except:
+			tusername=None
+			tfirst_name=None
+			tlast_name=None
+			temail=None	
+			tname=None
+	else:
+		return redirect('/original_account/login/')	
+	return render_to_response('account/profile.html',locals(),context_instance=RequestContext(request))
 class CloseableSignupMixin(object):
     template_name_signup_closed = "account/signup_closed.html"
 
@@ -452,3 +497,4 @@ class LogoutView(TemplateResponseMixin, View):
 
 
 logout = LogoutView.as_view()
+

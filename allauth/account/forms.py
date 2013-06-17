@@ -19,7 +19,7 @@ from .utils import perform_login, send_email_confirmation, setup_user_email
 from .app_settings import AuthenticationMethod
 from . import app_settings
 from .adapter import get_adapter
-
+from original_account.models import UserProfile
 User = get_user_model()
 
 class PasswordField(forms.CharField):
@@ -424,5 +424,4 @@ class ResetPasswordKeyForm(forms.Form):
         user.save()
         # mark password reset object as reset
         # PasswordReset.objects.filter(temp_key=self.temp_key).update(reset=True)
-
 

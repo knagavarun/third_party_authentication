@@ -1,0 +1,14 @@
+<html>
+<head>
+            <b><center>profile of various social accounts</center></br></b>
+<body>
+{% load account %}
+{% load socialaccount %}
+{{ user.socialaccount.set.all.0.get_provider }}
+	<title>profile</title>	
+	<a>username = </a>{{ user.socialaccount.set.all.0.get_provider_account }}
+{{ user.socialaccount.set.all.1.get_provider }}
+	<title>profile</title>		
+	<a>username = </a>{{ user.socialaccount.set.all.1.get_provider_account }}
+</body>
+</html>
