@@ -1,0 +1,11 @@
+<html>
+<head>
+                          <title><center>Your Google Account Profile</br></center></title>
+</head>
+<body>	
+{% load account %}
+{% load socialaccount %}
+<a href="{% provider_login_url 'facebook' method='oauth2' %}">Facebook</a> <p>Username={{ fusername }}</p> <p>Email Id={{ femail }}</p> <p>First_Name={{ ffirst_name }}</p> <p>Last_Name={{ flast_name }}</p>
+ {% user_display user %} <a href="{% url account_logout %}">Logout</a>
+</body>
+</html>

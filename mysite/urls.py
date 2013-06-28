@@ -5,6 +5,7 @@ from django.contrib import admin
 admin.autodiscover()
 from allauth.account.views import *
 from allauth.socialaccount.views import *
+from original_account.views import Login,home,Logout
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'mysite.views.home', name='home'),
@@ -14,10 +15,12 @@ urlpatterns = patterns('',
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
+	url(r'^$',home),
+	url(r'^original/logout/$',Logout,name='original_logout'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include('allauth.urls')),
 	url(r'^original/', include('original_account.urls')),
-    url('^login/$', login, name='account_login'),
+    url('^login/$', Login),
     url('^logout/$', logout, name='account_logout'),
     url('^login/cancelled/$', login_cancelled, name='socialaccount_login_cancelled'),
     url('^login/error/$', login_error, name='socialaccount_login_error'),

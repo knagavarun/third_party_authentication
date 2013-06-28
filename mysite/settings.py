@@ -31,6 +31,7 @@ DATABASES = {
         'NAME': 'webops',                      # Or path to database file if using sqlite3.
         'USER': 'varun',                      # Not used with sqlite3.
         'PASSWORD': 'home',                  # Not used with sqlite3.
+		'default-character-set': 'utf8',
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
@@ -62,6 +63,8 @@ USE_L10N = True
 
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
+
+SITE_URL = 'http://127.0.0.1:8000/'
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
@@ -154,20 +157,8 @@ INSTALLED_APPS = (
 	'allauth',
     'allauth.account',
     'allauth.socialaccount',
-	'allauth.socialaccount.providers.bitly',
-    'allauth.socialaccount.providers.dropbox',
     'allauth.socialaccount.providers.facebook',
-    'allauth.socialaccount.providers.github',
-    'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.linkedin',
-    'allauth.socialaccount.providers.openid',
-    'allauth.socialaccount.providers.persona',
-    'allauth.socialaccount.providers.soundcloud',
-    'allauth.socialaccount.providers.stackexchange',
-    'allauth.socialaccount.providers.twitch',
-    'allauth.socialaccount.providers.twitter',
-    'allauth.socialaccount.providers.vimeo',
-    'allauth.socialaccount.providers.weibo',    
+    'allauth.socialaccount.providers.google',   
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:

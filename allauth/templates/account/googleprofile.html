@@ -6,7 +6,5 @@
 {% load account %}
 {% load socialaccount %}
 	<a href="{% provider_login_url 'google' method='oauth2' %}">Google</a>     <p>Username={{ gusername }}</p> <p>Email Id={{ gemail }}</p> <p>First_Name={{ gfirst_name }}</p> <p>Last_Name={{ glast_name }}</p>
-	{{ value|linebreaks }}	
-	<a href="{% provider_login_url 'twitter' method='oauth2' %}">Twitter</a>   <p>Username={{ tusername }}</p> <p>Email Id={{ temail }}</p> <p>Name={{ tname }}</p>
 </body>
 </html>

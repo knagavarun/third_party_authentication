@@ -5,14 +5,15 @@ from django.shortcuts import *
 from django.contrib.auth.models import User
 from original_account.models import UserProfile
 from original_account.forms import RegistrationForm,LoginForm
-from django.contrib.auth import authenticate,login
+from django.contrib.auth import authenticate,login,logout
+from original_account.models import SUserProfile
 def register(request):
 	if request.method == 'POST':
 		form = RegistrationForm(request.POST)
 		if form.is_valid():
 			#print('yes')		
 			data = form.cleaned_data			
-			newuser = User(username = data['username'],email_id=data['email_id'],first_name=data['first_name'],last_name=data['last_name'])
+			newuser = User(username = data['username'],email=data['email_id'],first_name=data['first_name'],last_name=data['last_name'])
 			newuser.set_password(data['password']) 
 			newuser.save()
 			userprofile = UserProfile(
@@ -20,7 +21,7 @@ def register(request):
 			#name = data['name'],			
 			gender = data['gender'],
 			age = data['age'],
-#			email_id = data['email_id'],
+			mobilenumber = data['mobilenumber'],
 			)
 			userprofile.save()
 			#print('no')
@@ -36,10 +37,14 @@ def Login(request):
 			print('yo')		
 			username = request.POST['username']
 			password = request.POST['password']
-			user = authenticate(username=username,password=password)
+			user=authenticate(username=username,password=password)
 			if user is not None:
-				#login(request,user)
+				#if user.is_active:
+				login(request,user)
 				return HttpResponse("thankyou")
+		#		else:
+		#			error_message = "your account has been disabled"
+		#			return render_to_response('original_account/login.html',locals(),context_instance=RequestContext(request))			
 			else:
 				print('nono')					
 				error_message = "your username and password didn't match"
@@ -48,6 +53,15 @@ def Login(request):
 	else:
 		form = LoginForm()
 	return render_to_response('original_account/login.html',locals(),context_instance=RequestContext(request))
-
+def Logout(request):
+	logout(request)
+	return HttpResponse("you're logged out")
+def home(request):	
+	try:
+		old_user=SUserProfile.objects.get(email_id='knagavarun@gmail.com')
+		username=old_user.provider
+	except:
+		username=None
+	return render_to_response('original_account/home.html',locals(),context_instance=RequestContext(request))
 
 			

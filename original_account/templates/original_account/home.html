@@ -1,0 +1,18 @@
+<html>
+                         <head>
+                         <b><center>WELCOME TO SHAASTRA HOME PAGE<br/></center></b>
+                         </head>
+<body>
+		{% load account %}
+		{% load socialaccount %}
+        {% if not request.user.is_authenticated %}
+		<a href="{% url account_login %}">login</a>
+		{% else %}
+		"{{ value|ljust:"10" }}"
+		{% user_display user %} <a href="{% url account_logout %}"> logout </a>
+		                {{ value|linebreaks }}  
+		<a> view your </a> 
+		<a href="{% url account_profileview %}"> profile </a>
+		{% endif %}
+</body>
+</html>

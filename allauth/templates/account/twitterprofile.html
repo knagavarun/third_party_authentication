@@ -1,0 +1,10 @@
+<html>
+<head>
+            <b><center>Your Twitter Account Profile</center></br></b>
+</head>
+<body>
+{% load account %}
+{% load socialaccount %}
+	<a href="{% provider_login_url 'twitter' method='oauth2' %}">Twitter</a>   <p>Username={{ tusername }}</p> <p>Email Id={{ temail }}</p> <p>Name={{ tname }}</p>
+</body>
+</html>

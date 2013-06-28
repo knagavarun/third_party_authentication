@@ -22,7 +22,6 @@
     {% else %}
 
     {% user_display user %} <a href="{% url account_logout %}">Logout</a>
-	{{ user.socialaccount_set.all.0.user }}
     {% endif %}
 	</body>
 </html>

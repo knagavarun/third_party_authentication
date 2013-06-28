@@ -18,7 +18,7 @@ class RegistrationForm(SampleRegistrationForm):
 	email_id   = forms.EmailField(max_length=20)
 	class Meta(SampleRegistrationForm.Meta):
 		fields = ('username','password','email_id','first_name','last_name',\
-				  'gender','age','mobilenumber')
+				  'gender','age','mobilenumber',)
 class LoginForm(forms.Form):
 	username = forms.CharField(max_length=30)
 	password = forms.CharField(max_length=30,widget=forms.PasswordInput) 

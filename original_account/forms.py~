@@ -28,5 +28,5 @@ class LoginForm(forms.Form):
 #class edituserform(sampleedituserform):
 #	class Meta(sampleedituserform.Meta):
 #		fields = (\
-				  'mobilenumber') 
+#				  'mobilenumber') 
 

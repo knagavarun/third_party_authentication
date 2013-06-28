@@ -1,6 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect, Http404 ,HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.utils.http import base36_to_int
@@ -32,7 +32,9 @@ from . import app_settings
 from .adapter import get_adapter
 from allauth.socialaccount.models import SocialAccount
 from allauth.account.models import EmailAddress
-from allauth.account.utils import user_email
+#from allauth.account.utils import user_email
+from original_account.models import SUserProfile
+from mysite.settings import SITE_URL
 User = get_user_model()
 
 class RedirectAuthenticatedUserMixin(object):
@@ -85,45 +87,95 @@ login = LoginView.as_view()
 def profileview(request):
 	user=request.user	
 	if user.is_authenticated:
-		a=SocialAccount.objects.filter(user=user)	
-		try:	
-			f=a.get(provider='facebook')
-			fusername=f.get_provider_account	
-			fdata=f.extra_data 
-			ffirst_name=fdata['first_name']		
-			flast_name=fdata['last_name']
-			femail=fdata.get('email')
-		except:		
-			fusername=None
-			ffirst_name=None
-			flast_name=None
-			femail=None
-		try:
-			g=a.get(provider='google')
-			gusername=g.get_provider_account			
-			gdata=g.extra_data
-			gfirst_name=gdata['given_name']
-			glast_name=gdata['family_name']			
-			gemail=gdata['email']
-		except:
-			gusername=None
-			gemail=None
-			gfirst_name=None
-			glast_name=None
-		try:	
-			t=a.get(provider='twitter')	
-			tusername=t.get_provider_account
-			tdata=t.extra_data
-			temail=tdata['email']
-			tname=tdata['name']
-		except:
-			tusername=None
-			tfirst_name=None
-			tlast_name=None
-			temail=None	
-			tname=None
-	else:
-		return redirect('/original_account/login/')	
+		fgaccount=SocialAccount.objects.filter(user=user)	
+		if fgaccount:		
+			try:	
+				f=fgaccount.get(provider='facebook')
+			except:
+				f=None
+			if f:
+				fusername=f.get_provider_account	
+				fdata=f.extra_data 
+				ffirst_name=fdata['first_name']		
+				flast_name=fdata['last_name']
+				femail=fdata.get('email')
+				fprovider=f.provider
+				try:
+					old_user=SUserProfile.objects.get(email_id=femail)
+					print('nono')					
+				except:
+					print('yses')
+					old_user=None
+				if old_user:
+					if old_user.provider!='facebook':
+						provider=old_user.provider
+						return HttpResponse("sorry this email_id is already registered with %s,so please login with %s" %provider %provider)
+					print('facebook')
+				else:					
+					newuser = SUserProfile(
+							  susername=fusername,
+							  email_id=femail,
+							  first_name=ffirst_name,
+							  last_name=flast_name,
+							  provider='facebook',
+							  )
+					print('else')
+					newuser.save()
+				return render_to_response('account/facebookprofile.html',locals(),context_instance=RequestContext(request))
+	
+			try:
+				g=fgaccount.get(provider='google')
+			except:
+				g=None
+			if g:
+				gusername=g.get_provider_account			
+				gdata=g.extra_data
+				gfirst_name=gdata['given_name']
+				glast_name=gdata['family_name']			
+				gemail=gdata.get('email')
+				gprovider=g.provider
+				try: 
+					print('pepe')
+					old_user=SUserProfile.objects.get(email_id=gemail)
+				except:
+					old_user=None
+					print('except')
+				if old_user:
+					if old_user.provider!='google':
+						provider=old_user.provider
+						return HttpResponse('sorry this email_id is already registered with %s,so please login with %s' %provider %provider)
+				else:
+					print('kele')
+					newuser = SUserProfile(
+							  susername=gusername,				
+						      email_id=gemail,
+						      first_name=gfirst_name,
+						      last_name=glast_name,
+							  provider='google',
+							  )
+					newuser.save()
+				return render_to_response('account/googleprofile.html',locals(),context_instance=RequestContext(request))
+					
+			#try:	
+			#	t=fgaccount.get(provider='twitter')	
+			#except:
+			#	t=None
+			#if t:
+				#tusername=t.get_provider_account
+				#tdata=t.extra_data
+				#temail=tdata['email'],twitter api is not giving access to email-id,so avoiding it.
+				#tname=tdata['name']
+				#try: 
+				#	old_user=SUserProfile.objects.get(susername=tusername)
+				#except:
+				#	newuser=SUserProfile(
+				#	susername=tusername,
+				#	email_id=temail,
+				#	first_name=tname)
+				#	newuser.save()
+				#return render_to_response('account/profile.html',locals(),context_instance=RequestContext(request))  
+		else:
+			return redirect('/original/login/')
 	return render_to_response('account/profile.html',locals(),context_instance=RequestContext(request))
 class CloseableSignupMixin(object):
     template_name_signup_closed = "account/signup_closed.html"
