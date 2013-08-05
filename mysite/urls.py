@@ -16,12 +16,12 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
 	url(r'^$',home),
-	url(r'^original/logout/$',Logout,name='original_logout'),
+	#url(r'^original/logout/$',Logout,name='original_logout'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include('allauth.urls')),
 	url(r'^original/', include('original_account.urls')),
-    url('^login/$', Login),
-    url('^logout/$', logout, name='account_logout'),
+    #url('^login/$', Login),
+    #url('^logout/$', logout, name='account_logout'),
     url('^login/cancelled/$', login_cancelled, name='socialaccount_login_cancelled'),
     url('^login/error/$', login_error, name='socialaccount_login_error'),
 )

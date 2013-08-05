@@ -158,12 +158,14 @@ INSTALLED_APPS = (
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
-    'allauth.socialaccount.providers.google',   
+    'allauth.socialaccount.providers.google',
+	'allauth.socialaccount.providers.twitter',   
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
 	'original_account',
+	'captcha',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -197,3 +199,21 @@ LOGGING = {
 AUTH_PROFILE_MODULE="User.UserProfile"
 ACCOUNT_EMAIL_REQUIRED=True
 ACCOUNT_EMAIL_VERIFICATION="none"
+SOCIALACCOUNT_PROVIDERS = \
+{ 'facebook':
+	{ 'SCOPE': ['email','publish_stream','user_birthday'],
+	  'AUTH_PARAMS': { 'auth_type': 'reauthenticate' },
+	  'METHOD': 'js_sdk' ,
+	  'LOCALE_FUNC': lambda request: 'en_US'}}
+RECAPTCHA_PUBLIC_KEY = '6LeGDuUSAAAAAK3GziADrTRgo38gyDFKTP5KF582'  
+RECAPTCHA_PRIVATE_KEY = '6LeGDuUSAAAAAE_A3poLOW4iQ_WTqN-ogQOXDoNd'
+RECAPTCHA_USE_SSL = True  
+
+EMAIL_USE_TLS = False
+EMAIL_HOST='localhost'
+EMAIL_PORT=1025
+EMAIL_HOST_USER='shaastra'
+EMAIL_HOST_PASSWORD='GzM9N1tpqlE0'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+

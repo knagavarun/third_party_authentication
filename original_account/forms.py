@@ -1,15 +1,10 @@
 from django import forms
 from original_account.models import UserProfile
+from captcha.fields import ReCaptchaField
+from mysite.settings import RECAPTCHA_PUBLIC_KEY,RECAPTCHA_PRIVATE_KEY
 class SampleRegistrationForm(forms.ModelForm):
-	#name      = forms.CharField#(max_length=30)
-	#email_id  = forms.EmailField()
-	#gender    = forms.CharField(max_length=1,choices=[('M','Male'),('F','Female')])
-	#age       = forms.IntegerField#(max_length=2)
-	#Username  = forms.CharField(max_length=20)
-	#password  = forms.CharField(widget=forms.PasswordInput)
 	class Meta:
 		model = UserProfile
-#		fields = ('name','email_id','gender','age','username','password')
 class RegistrationForm(SampleRegistrationForm):
 	username   = forms.CharField(max_length=20)
 	password   = forms.CharField(max_length=20,widget=forms.PasswordInput)	
@@ -20,6 +15,11 @@ class RegistrationForm(SampleRegistrationForm):
 		fields = ('username','password','email_id','first_name','last_name',\
 				  'gender','age','mobilenumber',)
 class LoginForm(forms.Form):
+	captcha = ReCaptchaField(
+			  public_key=RECAPTCHA_PUBLIC_KEY,
+			  private_key=RECAPTCHA_PRIVATE_KEY,
+			  attrs={'theme':'clean'}
+			  )
 	username = forms.CharField(max_length=30)
 	password = forms.CharField(max_length=30,widget=forms.PasswordInput) 
 #class sampleedituserform(forms.ModelForm):

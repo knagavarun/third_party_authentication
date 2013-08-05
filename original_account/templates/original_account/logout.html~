@@ -1,0 +1,16 @@
+{% load socialaccount %}
+{% load url from future %}
+{% providers_media_js %}
+<script type="text/javascript">
+function handlesessionresponse(response) {
+	if (!response.session) {
+			window.location = '/accounts/login.aspx';
+			return;
+}
+	FB.logout(handlesessionresponse);
+}
+//FB.logout(function(response) {
+ //user is logged out
+//});
+</script>
+<a href='javascript:handlesessionresponse(response)'>signout</a>

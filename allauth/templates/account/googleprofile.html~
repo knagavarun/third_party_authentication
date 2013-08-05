@@ -1,0 +1,13 @@
+<html>
+<head>
+            <b><center>Your Google Account Profile</center></br></b>
+</head>
+<body>
+{% load account %}
+{% load socialaccount %}
+<script type="text/javascript" 
+    src="https://mail.google.com/mail/u/0/?logout&hl=en" />
+	<a href="{% provider_login_url 'google' method='oauth2' %}">Google</a>     <p>Username={{ gusername }}</p> <p>Email Id={{ gemail }}</p> <p>First_Name={{ gfirst_name }}</p> <p>Last_Name={{ glast_name }}</p>
+{% user_display user %} <a href="https://accounts.google.com/logout">Logout</a>
+</body>
+</html>

@@ -1,0 +1,41 @@
+{% load url from future %}
+{% load staticfiles %}
+<div id="fb-root"></div>
+<script type="text/javascript" src="{% static "facebook/js/fbconnect.js" %}"></script>
+<script type="text/javascript">
+//handle a session response from any of the auth related calls
+//function handleSessionResponse(response) {
+    //if we dont have a session (which means the user has been logged out, redirect the user)
+  //  if (!response.session) {
+    //    window.location = "/mysite/allauth/Login.aspx";
+      //  return;
+    //}
+    //if we do have a non-null response.session, call FB.logout(),
+    //the JS method will log the user out of Facebook and remove any authorization cookies
+//    FB.logout(handleSessionResponse);
+//}
+function logoutFBUser(){
+//logout user from website and Facebook and reload 
+alert ("called FB logout");
+if (FB.getAuthResponse()) {
+    alert ("has auth response");
+     FB.logout(function(response) {
+        window.location.href = '/accounts/logout?next=/';
+    });
+    alert ("logged out of FB and redirected");
+}
+else {
+        alert(" no auth response");
+        window.location.href = '/accounts/logout?next=/';
+}
+}
+allauth.facebook.init({ appId: '{{facebook_app.client_id}}',
+  locale: '{{facebook_jssdk_locale}}',
+  loginOptions: {{fb_login_options}},
+  loginByTokenUrl: '{% url 'facebook_login_by_token' %}',
+  channelUrl : '{{facebook_channel_url}}',
+  cancelUrl: '{% url 'socialaccount_login_cancelled' %}',
+  logoutUrl: '{% url 'account_logout' %}',
+  errorUrl: '{% url 'socialaccount_login_error' %}',
+  csrfToken: '{{csrf_token}}' });
+</script>

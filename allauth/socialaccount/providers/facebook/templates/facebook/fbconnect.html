@@ -1,46 +1,41 @@
 {% load url from future %}
+{% load staticfiles %}
 <div id="fb-root"></div>
-<script>
-  window.FB_login = function() {};
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '{{facebook_app.client_id}}',
-      channelUrl : '{{facebook_channel_url}}',
-      status     : true,
-      cookie     : true,
-      oauth      : true,
-      xfbml      : true
-    });
-    window.FB_login = function(nextUrl) {
-      FB.login(function(response) {
-        if (response.authResponse) {
-          document.getElementById("_fb_access_token").value = response.authResponse.accessToken;
-          document.getElementById("_fb_expires_in").value = response.authResponse.expiresIn;
-          document.getElementById("_fb_next_url").value = nextUrl || '';
-          document.getElementById("_fb_login").submit();
-        } else {
-          var next;
-          if (response && response.status && response.status == "notConnected") {
-            next = '{% url 'socialaccount_login_cancelled' %}';
-          } else {
-            next = '{% url 'socialaccount_login_error' %}';
-          }
-          window.location.href = next;
-        }
-      }, {{fb_login_options}});
-    }
-  };
-  (function(d){
-     var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
-     js = d.createElement('script'); js.id = id; js.async = true;
-     js.src = "//connect.facebook.net/{{facebook_jssdk_locale}}/all.js";
-     d.getElementsByTagName('head')[0].appendChild(js);
-   }(document));
+<script type="text/javascript" src="{% static "facebook/js/fbconnect.js" %}"></script>
+<script type="text/javascript">
+//handle a session response from any of the auth related calls
+//function handleSessionResponse(response) {
+    //if we dont have a session (which means the user has been logged out, redirect the user)
+  //  if (!response.session) {
+    //    window.location = "/mysite/allauth/Login.aspx";
+      //  return;
+    //}
+    //if we do have a non-null response.session, call FB.logout(),
+    //the JS method will log the user out of Facebook and remove any authorization cookies
+//    FB.logout(handleSessionResponse);
+//}
+//function logoutFBUser(){
+//logout user from website and Facebook and reload 
+//alert ("called FB logout");
+//if (FB.getAuthResponse()) {
+//    alert ("has auth response");
+//     FB.logout(function(response) {
+//        window.location.href = '/accounts/logout?next=/';
+//    });
+//    alert ("logged out of FB and redirected");
+//}
+//else {
+//        alert(" no auth response");
+//       window.location.href = '/accounts/logout?next=/';
+//}
+//}
+allauth.facebook.init({ appId: '{{facebook_app.client_id}}',
+  locale: '{{facebook_jssdk_locale}}',
+  loginOptions: {{fb_login_options}},
+  loginByTokenUrl: '{% url 'facebook_login_by_token' %}',
+  channelUrl : '{{facebook_channel_url}}',
+  cancelUrl: '{% url 'socialaccount_login_cancelled' %}',
+  logoutUrl: '{% url 'account_logout' %}',
+  errorUrl: '{% url 'socialaccount_login_error' %}',
+  csrfToken: '{{csrf_token}}' });
 </script>
-
-<form id="_fb_login" method="post" action="{% url 'facebook_login_by_token' %}">
-{% csrf_token %}
-<input type="hidden" name="next" value="" id="_fb_next_url"/>
-<input type="hidden" name="access_token" id="_fb_access_token"/>
-<input type="hidden" name="expires_in" id="_fb_expires_in"/>
-</form>

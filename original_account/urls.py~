@@ -1,8 +1,9 @@
 from django.conf.urls import url,patterns,include 
-from original_account.views import register,Login
+from original_account.views import register,Login,send
 
 urlpatterns = patterns('',
 	url(r'^register/$',register),
-	url(r'^login/',Login),
+	url(r'^login/$',Login),
+	url(r'^mail/$',send),
 	#url(r'^editprofile/$',edit_profile),
 )
